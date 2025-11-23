@@ -130,6 +130,10 @@ export default function Home() {
             setInviteStatus("idle");
           }}
           onSubmit={handleInviteSubmit}
+          onContinueToSignup={() => {
+            // In a real implementation we would carry a validated invite token.
+            window.location.href = "/signup";
+          }}
         />
       )}
     </div>
@@ -158,6 +162,7 @@ type InviteDialogProps = {
   inviteStatus: InviteStatus;
   onClose: () => void;
   onSubmit: (event: FormEvent) => void;
+  onContinueToSignup: () => void;
 };
 
 type HeaderProps = {
@@ -191,12 +196,12 @@ function Header({ onOpenInvite }: HeaderProps) {
         </a>
       </nav>
       <div className="flex items-center gap-3">
-        <button
-          type="button"
+        <a
+          href="/login"
           className="hidden text-xs font-medium text-white/80 hover:text-white sm:inline"
         >
           Sign in
-        </button>
+        </a>
         <button
           type="button"
           onClick={onOpenInvite}
@@ -233,7 +238,7 @@ function HeroSection({
   return (
     <section
       aria-labelledby="hero-title"
-      className="mt-10 rounded-3xl bg-black/30 px-6 py-10 text-white ring-1 ring-white/10 backdrop-blur sm:px-8"
+      className="mt-16 px-4 text-white sm:px-8"
     >
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#FF9B6A]">
@@ -247,12 +252,6 @@ function HeroSection({
           Find the communities that feel like home—and the people who truly see
           you.
         </h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-white/80">
-          Violette is where authentic relationships live—without algorithms
-          manipulating your feed, ads interrupting your flow, or censorship
-          silencing your truth. Join intentional communities centered around
-          healing, consciousness, and purpose-driven collaboration.
-        </p>
         <p className="text-xs font-medium uppercase tracking-[0.25em] text-white/70">
           Sacred seekers • Healing circles • Conscious collaborations
         </p>
@@ -270,12 +269,12 @@ function HeroSection({
           >
             Have an invite code?
           </button>
-          <button
-            type="button"
+          <a
+            href="/login"
             className="text-white/70 underline-offset-4 hover:text-white hover:underline"
           >
             Already a member? Sign in
-          </button>
+          </a>
         </div>
         <div
           id="waitlist"
@@ -461,12 +460,20 @@ function SocialMediaReimaginedSection() {
     <section className="space-y-4 rounded-3xl bg-[#261C46]/80 p-8 text-white ring-1 ring-white/10">
       <div className="space-y-2">
         <h2 className="text-sm font-semibold">Social Media Reimagined</h2>
-        <p className="max-w-2xl text-xs text-white/80">
-          We’re taking social media back to its purpose: connecting humans. No
-          ads, no algorithms exploiting your attention, no censorship of your
-          truth. Just thoughtful technology that helps you find your people and
-          build real relationships.
-        </p>
+        <div className="space-y-2 text-xs text-white/80">
+          <p className="max-w-2xl">
+            We’re taking social media back to its purpose: connecting humans. No
+            ads, no algorithms exploiting your attention, no censorship of your
+            truth. Just thoughtful technology that helps you find your people and
+            build real relationships.
+          </p>
+          <p className="max-w-2xl">
+            Violette is where authentic relationships live—without algorithms
+            manipulating your feed, ads interrupting your flow, or censorship
+            silencing your truth. Join intentional communities centered around
+            healing, consciousness, and purpose-driven collaboration.
+          </p>
+        </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <TechCard
@@ -1001,6 +1008,7 @@ function InviteDialog({
   inviteStatus,
   onClose,
   onSubmit,
+  onContinueToSignup,
 }: InviteDialogProps) {
   const isChecking = inviteStatus === "checking";
   const isValid = inviteStatus === "valid";
@@ -1051,10 +1059,16 @@ function InviteDialog({
           </button>
         </form>
         {isValid && (
-          <p className="mt-3 text-xs text-emerald-300" aria-live="polite">
-            This invite code looks good. In the full experience, you’d now be
-            redirected into sign-up.
-          </p>
+          <div className="mt-3 space-y-2 text-xs text-emerald-300" aria-live="polite">
+            <p>This invite code looks good.</p>
+            <button
+              type="button"
+              onClick={onContinueToSignup}
+              className="inline-flex rounded-full bg-white px-4 py-2 text-[11px] font-semibold text-[#261C46] shadow-sm transition hover:bg-[#FF9B6A] hover:text-[#261C46]"
+            >
+              Continue to sign up
+            </button>
+          </div>
         )}
         {isInvalid && (
           <div className="mt-3 space-y-1 text-xs text-[#FF7B54]" aria-live="polite">
